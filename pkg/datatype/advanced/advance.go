@@ -77,5 +77,26 @@ func TestSlice() {
 }
 
 func TestMap() {
+	// map[K]T
+	// 请注意，字典的键类型必须是可比较的，否则会引起错误。也就是说，它不能是切片、字典或函数类型。
+	var myMap map[int]string
+	// 上句是声明，若无下句初始化，则 panic: assignment to entry in nil map
+	// 数组例外，声明即创建
+	myMap = map[int]string{}
+	//myMap
+	myMap[4] = "测试"
+	fmt.Println(myMap[4])
+	fmt.Println(myMap)
 
+	myMap2 := map[int]string{1: "a", 2: "b", 3: "c"}
+	fmt.Println(myMap2[2])
+	fmt.Println(myMap2)
+
+	// 在不知道mm的确切值的情况下，我们无法得知mm[5]的求值结果意味着什么？它意味着5对应的值就是一个空字符串？
+	// 还是说mm中根本就没有键为5的键值对？这无所判别。为了解决这个问题，Go语言为我们提供了另外一个写法，即：
+	//e, ok := myMap2[5]
+
+	// delete
+	delete(myMap2, 1)
+	fmt.Println(myMap2)
 }
