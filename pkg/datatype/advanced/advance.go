@@ -11,7 +11,7 @@ import (
 //1. 定义结构体
 //2. 定义接口
 //3. 类型定义 用在func上，例子如下： handle和exec
-//4. 类型别名
+//4. 类型别名4
 //5. 类型查询
 // 		如果使用.(type)查询类型的变量不是interface{}类型，则在编译时会报如下错误
 // 			cannot type switch on non-interface value a (type string)
@@ -152,5 +152,66 @@ func TestChannel() {
 }
 
 func TestFunc() {
-	// 在Go语言中，函数是一等（first-class）类型。这意味着，我们可以把函数作为值来传递和使用。
+	// 在Go语言中，函数是一等（first-class）类型。这意味着，我们可以把函数作为 值和参数 来传递和使用。
+	// 函数类型的声明和使用
+	var myF func(string, int) (string, int)
+	myF = func(str string, num int) (string, int) {
+		fmt.Println("I am 1 " + str + " " + string(num))
+		return "hi", 2
+	}
+
+	var myF2 MyFunc
+	myF2 = func(str string, num int) (string, int) {
+		fmt.Println("I am 2 " + str + " " + string(num))
+		return "hi", 3
+	}
+
+	// myF的类型等价于myF2
+	exec(myF)
+	exec(myF2)
+}
+
+// 函数类型声明
+type MyFunc func(str string, num int) (string, int)
+
+func exec(myfunc MyFunc) {
+	s, i := myfunc("hello", 1)
+	fmt.Println(s, " ", i)
+}
+
+type person struct {
+	Name   string
+	Gender string
+	Age    int8
+}
+
+func (p *person) test() {
+	fmt.Println("我是指针方法")
+}
+
+/**
+封装
+*/
+func TestStruct() {
+	// Struct
+	// 声明 var x structName
+	// 可以通过在结构体类型的声明中添加匿名字段（或称嵌入类型）来模仿继承。
+	var p1 person = person{}
+	fmt.Println(p1)
+	p1.test()
+
+	personSample := person{"a", "v", 1}
+	fmt.Println(personSample)
+
+	// 匿名结构体
+	p := struct {
+		Name   string
+		Gender string
+		Age    uint8
+	}{"Robert", "Male", 33}
+	fmt.Println(p)
+}
+
+func TestInterface() {
+
 }

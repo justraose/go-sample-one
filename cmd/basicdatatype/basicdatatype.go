@@ -31,4 +31,6 @@ func main() {
 
 	// 高级数据类型 >>> 2
 	advanced.TestFunc()
+	advanced.TestStruct()
+	advanced.TestInterface()
 }
