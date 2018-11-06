@@ -27,4 +27,8 @@ func main() {
 	advanced.TestArray()
 	advanced.TestSlice()
 	advanced.TestMap()
+	advanced.TestChannel()
+
+	// 高级数据类型 >>> 2
+	advanced.TestFunc()
 }

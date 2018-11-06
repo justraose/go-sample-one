@@ -1,6 +1,9 @@
 package advanced
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
 // type关键字介绍
 // https://blog.csdn.net/hzwy23/article/details/79890778
@@ -69,7 +72,7 @@ func TestSlice() {
 	var slice12 = array12[1:4]
 	fmt.Printf("len:%d, cap:%d \n", len(slice12), cap(slice12))
 
-	// 切面扩容
+	// 切面扩容， 声明切片
 	var slice11 []int
 	fmt.Printf("len:%d, cap:%d \n", len(slice11), cap(slice11))
 	slice11 = append(slice11, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11)
@@ -99,4 +102,55 @@ func TestMap() {
 	// delete
 	delete(myMap2, 1)
 	fmt.Println(myMap2)
+}
+
+func TestChannel() {
+	// 声明方法 chan T
+	// 带缓冲 阻塞队列，读写都阻塞
+	var myChan1 chan string
+	// 与其它的数据类型不同，我们无法表示一个通道类型的值。因此，我们也无法用字面量来为通道类型的变量赋值。
+	// 我们只能通过调用内建函数make来达到目的。
+	// make函数也可以被用来初始化切片类型或字典类型的值
+	// 初始化一个长度为5且元素类型为int的通道值
+	myChan1 = make(chan string, 5)
+	myChan1 <- "test chan"
+	fmt.Println("channel value = " + <-myChan1)
+
+	// 变量ok的值同样是bool类型的。它代表了通道值的状态，true代表通道值有效，而false则代表通道值已无效（或称已关闭）。
+	// 如果通道内部还有数据，即使close(chan)，仍返回true，当数据都取出后，才返回false
+	myChan1 <- "test two"
+	close(myChan1)
+	//close(myChan1) 对通道值的重复关闭会引发运行时恐慌
+	value, ok := <-myChan1
+	if ok == true {
+		fmt.Println("channel有数据，数据为：" + value)
+	} else {
+		fmt.Println("通道myChan1已关闭")
+	}
+
+	// 不带缓冲 阻塞队列， 类似于java的SynchronousQueue
+	type Sender chan<- int
+	type Receiver <-chan int
+
+	// 类似于java的SynchronousQueue
+	var myChannel = make(chan int, 0)
+	var number = 6
+	go func() {
+		var sender Sender = myChannel
+		//time.Sleep(30*time.Second)
+		sender <- number
+		fmt.Println("Sent!")
+	}()
+	go func() {
+		var receiver Receiver = myChannel
+		//time.Sleep(10*time.Second)
+		fmt.Println("Received!", <-receiver)
+	}()
+	// 让main函数执行结束的时间延迟1秒，
+	// 以使上面两个代码块有机会被执行。
+	time.Sleep(time.Second)
+}
+
+func TestFunc() {
+	// 在Go语言中，函数是一等（first-class）类型。这意味着，我们可以把函数作为值来传递和使用。
 }
