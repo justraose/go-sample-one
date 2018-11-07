@@ -118,9 +118,10 @@ func TestChannel() {
 
 	// 变量ok的值同样是bool类型的。它代表了通道值的状态，true代表通道值有效，而false则代表通道值已无效（或称已关闭）。
 	// 如果通道内部还有数据，即使close(chan)，仍返回true，当数据都取出后，才返回false
+	// 已关闭的通道不能再添加值，会发生运行时恐慌
 	myChan1 <- "test two"
 	close(myChan1)
-	//close(myChan1) 对通道值的重复关闭会引发运行时恐慌
+	// close(myChan1) 对通道值的重复关闭会引发运行时恐慌
 	value, ok := <-myChan1
 	if ok == true {
 		fmt.Println("channel有数据，数据为：" + value)
@@ -212,6 +213,51 @@ func TestStruct() {
 	fmt.Println(p)
 }
 
+type Animal interface {
+	Grow()
+	Move(new string) (old string)
+}
+
+type Cat struct {
+	little  string
+	num     int16
+	address string
+}
+
+func (cat *Cat) Grow() {
+	fmt.Println("Grow func")
+}
+
+func (cat *Cat) Move(new string) string {
+	old := cat.address
+	cat.address = new
+	return old
+}
+
 func TestInterface() {
+	// 如果一个数据类型所拥有的方法集合中包含了某一个接口类型中的所有方法声明的实现，
+	// 那么就可以说这个数据类型实现了那个接口类型。
+	// “方法集合为其超集”
+
+	// Go语言的类型转换规则定义了是否能够以及怎样可以把一个类型的值转换另一个类型的值。
+	// 另一方面，所谓空接口类型即是不包含任何方法声明的接口类型，用interface{}表示，常简称为空接口。
+	// 正因为空接口的定义，Go语言中的包含预定义的任何数据类型都可以被看做是空接口的实现。
+	var cat Cat = Cat{"1", 2, "3"}
+	var v interface{} = interface{}(&cat)
+	//  在这之后，我们就可以在v上应用类型断言了，即：
+	animal, ok := v.(Animal)
+	//  类型断言表达式v.(Animal)的求值结果可以有两个。
+	// 第一个结果是被转换后的那个目标类型（这里是Animal）的值，
+	// 而第二个结果则是转换操作成功与否的标志。
+	// 显然，ok代表了一个bool类型的值。它也是这里判定实现关系的重要依据。
+	fmt.Println(animal, " ", ok)
+
+	// question
+	// 为什么只有*Person类型才实现了Animal接口?
+}
+
+func TestPointer() {
+	// *Person是Person的指针类型
+	// 表达式&p的求值结果是p的指针
 
 }

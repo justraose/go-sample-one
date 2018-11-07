@@ -33,4 +33,7 @@ func main() {
 	advanced.TestFunc()
 	advanced.TestStruct()
 	advanced.TestInterface()
+
+	// 指针
+	advanced.TestPointer()
 }
