@@ -224,6 +224,7 @@ type Cat struct {
 	address string
 }
 
+// 值方法的 对象， 是内存副本
 func (cat Cat) Grow() {
 	fmt.Println("Grow func")
 	cat.num++
@@ -275,6 +276,7 @@ func TestPointer() {
 	catp.Move("new catp")
 	fmt.Println(catp)
 	// 取值 *
+	// 该处取值是生成新的副本
 	var cata Cat = *catp
 	cata.Grow()
 	cata.Move("new cata")
@@ -296,5 +298,13 @@ func TestPointer() {
 	// 这是因为，如果Go语言发现我们调用的Grow方法是bp的指针方法，那么它会把该调用表达式视为(&bp).Grow()。
 	// 实际上，这时的bp.Grow()是(&bp).Grow()的速记法
 
-	// 值方法的 对象， 是内存副本
+	// golang的方法调用，参数是值传递，传递的是对象副本，需要操作原对象内存，则使用指针
+	newCat := Cat{"zz", 0, "xx"}
+	addCat(newCat)
+	fmt.Println(newCat)
+
+}
+
+func addCat(cat Cat) {
+	cat.num++
 }
