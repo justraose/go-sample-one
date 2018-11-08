@@ -224,13 +224,15 @@ type Cat struct {
 	address string
 }
 
-func (cat *Cat) Grow() {
+func (cat Cat) Grow() {
 	fmt.Println("Grow func")
+	cat.num++
 }
 
 func (cat *Cat) Move(new string) string {
 	old := cat.address
 	cat.address = new
+	cat.num++
 	return old
 }
 
@@ -259,5 +261,40 @@ func TestInterface() {
 func TestPointer() {
 	// *Person是Person的指针类型
 	// 表达式&p的求值结果是p的指针
+	// 例如，*[3]string是数组类型[3]string的指针类型，而[3]string是*[3]string的基底类型
+	cat := Cat{"test", 1, "xiamen"}
 
+	// 之所以选择表达式person.Age成立，
+	// 是因为如果Go语言发现person是指针并且指向的那个值有Age字段，
+	// 那么就会把该表达式视为(*person).Age。
+	// 其实，这时的person.Age正是(*person).Age的速记法。
+	fmt.Println("===指针测试===")
+	// 寻址(指针) &
+	var catp *Cat = &cat
+	catp.Grow()
+	catp.Move("new catp")
+	fmt.Println(catp)
+	// 取值 *
+	var cata Cat = *catp
+	cata.Grow()
+	cata.Move("new cata")
+	fmt.Println(cata)
+
+	cat.Grow()
+	fmt.Println(cat)
+
+	// 多态
+	// 要注意指针方法与值方法的区别
+	// 拥有指针方法Grow和Move的指针类型*Person是接口类型Animal的实现类型，但是它的基底类型Person却不是
+	// 隐藏规则： 一个指针类型拥有以它以及以它的基底类型为接收者类型的所有方法，而它的基底类型却只拥有以它本身为接收者类型的方法。
+	animal, ok := interface{}(cat).(Animal)
+	an, ok1 := interface{}(&cat).(Animal)
+	fmt.Println(animal, ok, an, ok1)
+
+	// 我们在基底类型的值上仍然可以调用它的指针方法。
+	// 例如，若我们有一个Person类型的变量bp，则调用表达式bp.Grow()是合法的。
+	// 这是因为，如果Go语言发现我们调用的Grow方法是bp的指针方法，那么它会把该调用表达式视为(&bp).Grow()。
+	// 实际上，这时的bp.Grow()是(&bp).Grow()的速记法
+
+	// 值方法的 对象， 是内存副本
 }
