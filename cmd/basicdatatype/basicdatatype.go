@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"luzj.com/go-sample-one/pkg/datatype/advanced"
 	"luzj.com/go-sample-one/pkg/datatype/basic"
+	"luzj.com/go-sample-one/pkg/datatype/process"
 )
 
 // 常量只能被赋予基本数据类型的值本身
@@ -36,4 +37,15 @@ func main() {
 
 	// 指针
 	advanced.TestPointer()
+
+	// 基本流程控制
+	process.TestIf()
+	process.TestSwitch()
+	process.TestFor()
+	process.TestSelect()
+
+	// Exception && finally
+	process.TestDefer()
+	process.TestError()
+	process.TestPanicAndRecover()
 }
