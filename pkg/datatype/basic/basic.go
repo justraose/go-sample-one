@@ -1,6 +1,8 @@
 package basic
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func TestInt() {
 	// var
@@ -29,6 +31,8 @@ func TestInt() {
 
 	// 声明一个rune类型变量并赋值
 	var char1 rune = '赞'
+	var runes [3]rune = [3]rune{'啊', '我', '的'}
+	fmt.Println(runes)
 
 	// 这里用到了字符串格式化函数。其中，%c用于显示rune类型值代表的字符。
 	fmt.Printf("字符 '%c' 的Unicode代码点是 %s。\n", char1, "U+8D5E")
