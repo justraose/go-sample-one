@@ -29,7 +29,7 @@ func main() {
 	flag.StringVar(&test, "federation-namespace", "hehe", "test hehe")
 	flag.Usage = usage
 
-	// 解析
+	// 解析参数
 	flag.Parse()
 
 	if h {
