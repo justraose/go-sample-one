@@ -6,6 +6,7 @@ import (
 	"net/http"
 )
 
+// 更详细的例子查看go-restful example
 func main() {
 	// webservice
 	ws := new(restful.WebService)
